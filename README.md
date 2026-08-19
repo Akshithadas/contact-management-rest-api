@@ -1,17 +1,27 @@
 # Contact Management REST API
 
-A clean, lightweight RESTful API built with **Node.js** and **Express.js** for managing contact records with local **JSON file persistence**.
+A clean, lightweight RESTful backend API built with **Node.js** and **Express.js** for managing contact records with local **JSON file persistence**.
 
-Developed as an internship project demonstrating core backend architecture concepts, RESTful routing, HTTP status codes, payload validation, and file-based data persistence without external databases.
+This project implements a complete CRUD (Create, Read, Update, Delete) interface with robust request validation, standardized HTTP status codes, structured JSON error handling, and file-based storage.
 
 ---
 
-## 🚀 Technologies Used
+## 🌟 Key Features
 
-- **Node.js** - JavaScript runtime environment
-- **Express.js** - Web framework for Node.js
-- **JSON File Storage** - Lightweight persistent storage (`data/contacts.json`)
-- **Postman** - API testing and verification
+- **Full CRUD Operations**: Complete endpoints for creating, reading, updating, and deleting contact records.
+- **JSON File Persistence**: Persistent storage handled seamlessly via `data/contacts.json` without requiring external database configuration.
+- **Input & Payload Validation**: Automatic validation for required fields (`name`, `email`, `phone`) and non-empty strings.
+- **Standardized HTTP Responses**: Accurate status codes (`200 OK`, `201 Created`, `400 Bad Request`, `404 Not Found`, `500 Internal Server Error`).
+- **Clean Architecture**: Well-structured code with detailed inline comments and clear routing.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Node.js**: JavaScript server runtime environment
+- **Express.js**: Fast, minimalist web framework for Node.js
+- **JSON Storage**: Local file-based data persistence (`data/contacts.json`)
+- **Postman**: API development and verification tool
 
 ---
 
@@ -19,61 +29,62 @@ Developed as an internship project demonstrating core backend architecture conce
 
 ```text
 contact-management-rest-api/
-├── package.json
-├── server.js
 ├── data/
-│   └── contacts.json
-└── README.md
+│   └── contacts.json    # JSON storage file for persistent records
+├── .gitignore           # Git ignore configuration
+├── package.json         # Project manifest and scripts
+├── server.js            # Express server & API route handlers
+└── README.md            # Documentation
 ```
 
 ---
 
-## 🛠️ Installation Steps
+## 💾 Data Storage & Persistence
 
-1. **Clone or navigate to the repository directory**:
+All contact records are read from and written to `data/contacts.json` in real-time. Any changes made through `POST`, `PUT`, or `DELETE` requests are saved back to the JSON file, ensuring data persists across server restarts without requiring a traditional database system like PostgreSQL or MongoDB.
+
+---
+
+## ⚙️ Installation & Setup
+
+1. **Clone the repository**:
    ```bash
+   git clone https://github.com/Akshithadas/contact-management-rest-api.git
    cd contact-management-rest-api
    ```
 
-2. **Install project dependencies**:
+2. **Install dependencies**:
    ```bash
    npm install
    ```
 
----
-
-## ▶️ Running the Server
-
-Start the API server using npm:
-
-```bash
-npm start
-```
-
-The server will start listening at:
-`http://localhost:3000`
+3. **Start the server**:
+   ```bash
+   npm start
+   ```
+   The API server will run at: `http://localhost:3000`
 
 ---
 
-## 📡 API Endpoints
+## 📡 API Endpoints Reference
 
 Base URL: `http://localhost:3000`
 
-| Method | Endpoint | Description | Status Code (Success) | Error Codes |
+| Method | Endpoint | Description | Success Status | Error Statuses |
 | :--- | :--- | :--- | :--- | :--- |
-| **GET** | `/api/contacts` | Retrieve all contacts | `200 OK` | `500` |
-| **GET** | `/api/contacts/:id` | Retrieve a single contact by ID | `200 OK` | `404`, `500` |
-| **POST** | `/api/contacts` | Create a new contact | `201 Created` | `400`, `500` |
-| **PUT** | `/api/contacts/:id` | Update an existing contact by ID | `200 OK` | `400`, `404`, `500` |
-| **DELETE**| `/api/contacts/:id` | Delete a contact by ID | `200 OK` | `404`, `500` |
+| `GET` | `/api/contacts` | Retrieve all contacts | `200 OK` | `500` |
+| `GET` | `/api/contacts/:id` | Retrieve single contact by ID | `200 OK` | `404`, `500` |
+| `POST` | `/api/contacts` | Create a new contact record | `201 Created` | `400`, `500` |
+| `PUT` | `/api/contacts/:id` | Update an existing contact by ID | `200 OK` | `400`, `404`, `500` |
+| `DELETE` | `/api/contacts/:id` | Delete a contact record by ID | `200 OK` | `404`, `500` |
 
 ---
 
-## 📝 Example Requests & Responses
+## 📝 Request & Response Examples
 
-### 1. GET All Contacts
-- **URL**: `http://localhost:3000/api/contacts`
+### 1. Get All Contacts
 - **Method**: `GET`
+- **URL**: `http://localhost:3000/api/contacts`
 - **Response** (`200 OK`):
   ```json
   [
@@ -94,9 +105,9 @@ Base URL: `http://localhost:3000`
 
 ---
 
-### 2. GET One Contact
-- **URL**: `http://localhost:3000/api/contacts/1`
+### 2. Get Single Contact
 - **Method**: `GET`
+- **URL**: `http://localhost:3000/api/contacts/1`
 - **Response** (`200 OK`):
   ```json
   {
@@ -106,48 +117,36 @@ Base URL: `http://localhost:3000`
     "phone": "9876543210"
   }
   ```
-- **Error Response** (`404 Not Found`):
-  ```json
-  {
-    "error": "Contact not found"
-  }
-  ```
 
 ---
 
-### 3. POST Create Contact
-- **URL**: `http://localhost:3000/api/contacts`
+### 3. Create Contact
 - **Method**: `POST`
+- **URL**: `http://localhost:3000/api/contacts`
 - **Headers**: `Content-Type: application/json`
 - **Request Body**:
   ```json
   {
-    "name": "Alice Johnson",
-    "email": "alice@example.com",
-    "phone": "9988776655"
+    "name": "Alex Mercer",
+    "email": "alex@example.com",
+    "phone": "9876543210"
   }
   ```
 - **Response** (`201 Created`):
   ```json
   {
     "id": "1724073600000",
-    "name": "Alice Johnson",
-    "email": "alice@example.com",
-    "phone": "9988776655"
-  }
-  ```
-- **Validation Error Response** (`400 Bad Request`):
-  ```json
-  {
-    "error": "Name, email, and phone are required fields"
+    "name": "Alex Mercer",
+    "email": "alex@example.com",
+    "phone": "9876543210"
   }
   ```
 
 ---
 
-### 4. PUT Update Contact
-- **URL**: `http://localhost:3000/api/contacts/1`
+### 4. Update Contact
 - **Method**: `PUT`
+- **URL**: `http://localhost:3000/api/contacts/1`
 - **Headers**: `Content-Type: application/json`
 - **Request Body**:
   ```json
@@ -169,9 +168,9 @@ Base URL: `http://localhost:3000`
 
 ---
 
-### 5. DELETE Contact
-- **URL**: `http://localhost:3000/api/contacts/1`
+### 5. Delete Contact
 - **Method**: `DELETE`
+- **URL**: `http://localhost:3000/api/contacts/1`
 - **Response** (`200 OK`):
   ```json
   {
@@ -181,14 +180,31 @@ Base URL: `http://localhost:3000`
 
 ---
 
+### 🔴 Error Response Format
+
+- **Resource Not Found** (`404 Not Found`):
+  ```json
+  {
+    "error": "Contact not found"
+  }
+  ```
+
+- **Validation Failed** (`400 Bad Request`):
+  ```json
+  {
+    "error": "Name, email, and phone are required fields"
+  }
+  ```
+
+---
+
 ## 🧪 Testing with Postman
 
-1. Open **Postman**.
-2. Set up a request with the target HTTP Method (`GET`, `POST`, `PUT`, `DELETE`).
-3. Enter the request URL (e.g., `http://localhost:3000/api/contacts`).
-4. For `POST` and `PUT` requests:
-   - Click on the **Body** tab.
-   - Select **raw**.
-   - Set format dropdown to **JSON**.
+1. Launch **Postman**.
+2. Create a new collection named `Contact Management REST API`.
+3. Set the target HTTP method (`GET`, `POST`, `PUT`, `DELETE`).
+4. Enter the URL (e.g., `http://localhost:3000/api/contacts`).
+5. For `POST` and `PUT` requests:
+   - Select the **Body** tab -> **raw** -> **JSON**.
    - Paste the JSON payload into the editor.
-5. Click **Send** and inspect the returned status code and JSON response body.
+6. Click **Send** and inspect the returned HTTP status code and response body.
