@@ -1,0 +1,21 @@
+{
+  "name": "contact-management-rest-api",
+  "version": "1.0.0",
+  "description": "Simple REST API for managing contacts built with Node.js and Express.js using JSON file persistence",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "rest-api",
+    "contacts",
+    "json-storage"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
