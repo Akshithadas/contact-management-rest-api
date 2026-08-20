@@ -2,6 +2,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 // Initialize the Express application
 const app = express();
@@ -19,17 +20,20 @@ app.use(express.json());
 
 /**
  * Reads contacts array from data/contacts.json file.
- * Returns an empty array if file reading or parsing fails.
+ * Falls back to /tmp/contacts.json if needed for serverless environments.
  */
 function readContactsFromFile() {
   try {
-    if (!fs.existsSync(DATA_FILE)) {
-      // Create empty file if it doesn't exist yet
-      fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2), 'utf8');
-      return [];
+    if (fs.existsSync(DATA_FILE)) {
+      const fileData = fs.readFileSync(DATA_FILE, 'utf8');
+      return JSON.parse(fileData || '[]');
     }
-    const fileData = fs.readFileSync(DATA_FILE, 'utf8');
-    return JSON.parse(fileData || '[]');
+    const tmpFile = path.join(os.tmpdir(), 'contacts.json');
+    if (fs.existsSync(tmpFile)) {
+      const fileData = fs.readFileSync(tmpFile, 'utf8');
+      return JSON.parse(fileData || '[]');
+    }
+    return [];
   } catch (error) {
     console.error('Error reading contacts file:', error);
     return [];
@@ -38,20 +42,47 @@ function readContactsFromFile() {
 
 /**
  * Writes contacts array back to data/contacts.json file.
+ * Falls back to OS temp directory if primary location is read-only.
  */
 function writeContactsToFile(contacts) {
   try {
     fs.writeFileSync(DATA_FILE, JSON.stringify(contacts, null, 2), 'utf8');
     return true;
   } catch (error) {
-    console.error('Error writing contacts file:', error);
-    return false;
+    try {
+      const tmpFile = path.join(os.tmpdir(), 'contacts.json');
+      fs.writeFileSync(tmpFile, JSON.stringify(contacts, null, 2), 'utf8');
+      return true;
+    } catch (tmpError) {
+      console.error('Error writing contacts file:', tmpError);
+      return false;
+    }
   }
 }
 
 // ==========================================
 // API Routes
 // ==========================================
+
+/**
+ * @route   GET /
+ * @desc    Root welcome route & endpoint directory
+ * @access  Public
+ */
+app.get('/', (req, res) => {
+  res.status(200).json({
+    message: 'Welcome to the Contact Management REST API',
+    status: 'online',
+    endpoints: {
+      getAllContacts: 'GET /api/contacts',
+      getContactById: 'GET /api/contacts/:id',
+      createContact: 'POST /api/contacts',
+      updateContact: 'PUT /api/contacts/:id',
+      deleteContact: 'DELETE /api/contacts/:id'
+    },
+    documentation: 'https://github.com/Akshithadas/contact-management-rest-api#readme'
+  });
+});
 
 /**
  * @route   GET /api/contacts
@@ -221,7 +252,13 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Endpoint not found' });
 });
 
-// Start Express server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Start Express server if run directly
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}
+
+// Export Express app for Vercel / serverless deployments
+module.exports = app;
+

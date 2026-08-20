@@ -2,9 +2,32 @@
 
 A clean, lightweight RESTful backend API built with **Node.js** and **Express.js** for managing contact records with local **JSON file persistence**.
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FAkshithadas%2Fcontact-management-rest-api)
+[![Deploy to Render](https://render.com/images/deploy-to-render.svg)](https://render.com/deploy?repo=https://github.com/Akshithadas/contact-management-rest-api)
+
 This project implements a complete CRUD (Create, Read, Update, Delete) interface with robust request validation, standardized HTTP status codes, structured JSON error handling, and file-based storage.
 
 ---
+
+## 🚀 Live Deployment
+
+This REST API is ready for 1-click deployment on free hosting platforms:
+
+### Deploy to Vercel (Recommended - Instant Serverless API)
+1. Go to [Vercel.com](https://vercel.com) and sign in with your GitHub account.
+2. Click **Add New Project** and select `Akshithadas/contact-management-rest-api`.
+3. Click **Deploy**.
+4. Vercel will generate your live public URL (e.g. `https://contact-management-rest-api.vercel.app`).
+5. Copy this URL and add it to the **About** section of your GitHub repository!
+
+### Deploy to Render (Free Web Service)
+1. Go to [Render.com](https://render.com) and sign in with GitHub.
+2. Click **New +** -> **Web Service** and select `Akshithadas/contact-management-rest-api`.
+3. Click **Deploy Web Service**.
+4. Render will generate your live public URL (e.g. `https://contact-management-rest-api.onrender.com`).
+
+---
+
 
 ## 🌟 Key Features
 
